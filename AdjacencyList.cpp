@@ -41,7 +41,7 @@ void AdjacencyList::insert(std::string name, int age, std::string occupation, st
   //TODO
   
 }
-int hash(std::string str, int seed = 0) {
+int AdjacencyList::hash(std::string str, int seed = 0) {
   int hash = seed;
   for (int i = 0;i < str.length();i++) {
     hash = hash * 101 + str[i];
@@ -49,5 +49,9 @@ int hash(std::string str, int seed = 0) {
   return hash % TABLE_SIZE;
 }
 
-void search(std::string name);
-void print(int index);
+void AdjacencyList::search(std::string name) {
+  //TODO
+}
+void AdjacencyList::print(int index) {
+  //TODO
+}
