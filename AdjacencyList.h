@@ -1,5 +1,6 @@
 #ifndef ADJACENCYLIST_H
 #define ADJACENCYLIST_H
+
 #include "AdjListObject.h"
 #include <string>
 
@@ -10,6 +11,7 @@ class AdjacencyList {
   int hash(std::string str, int seed = 0);
   void search(std::string name);
   void print(int index);
+  
  private:
   int filled;
   int TABLE_SIZE;

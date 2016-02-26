@@ -5,12 +5,14 @@
 #include <stdio.h>
 #include <cstring>
 
+using namespace std;
+
 AdjacencyList::AdjacencyList() {
   array = new AdjListObject[201]; 
   filled = 0;
   TABLE_SIZE = 201;
 }
-void AdjacencyList::insert(std::string name, int age, std::string occupation, std::string *friends, int friendarraysize) {
+void AdjacencyList::insert(string name, int age, string occupation, string *friends, int friendarraysize) {
   //determine array index
   index = hash(name);
   while (array[index].name != "") {
@@ -41,7 +43,7 @@ void AdjacencyList::insert(std::string name, int age, std::string occupation, st
   //TODO
   
 }
-int AdjacencyList::hash(std::string str, int seed = 0) {
+int AdjacencyList::hash(string str, int seed = 0) {
   int hash = seed;
   for (int i = 0;i < str.length();i++) {
     hash = hash * 101 + str[i];
@@ -49,7 +51,7 @@ int AdjacencyList::hash(std::string str, int seed = 0) {
   return hash % TABLE_SIZE;
 }
 
-void AdjacencyList::search(std::string name) {
+void AdjacencyList::search(string name) {
   //TODO
 }
 void AdjacencyList::print(int index) {
