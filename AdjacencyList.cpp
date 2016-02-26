@@ -7,25 +7,30 @@
 
 using namespace std;
 
-AdjacencyList::AdjacencyList() {
-  array = new AdjListObject[201]; 
+AdjacencyList::AdjacencyList()
+{
+  array = new AdjListObject[211]; 
   filled = 0;
-  TABLE_SIZE = 201;
+  TABLE_SIZE = 211;
 }
-void AdjacencyList::insert(string name, int age, string occupation, string *friends, int friendarraysize) {
-  //determine array index
+void AdjacencyList::insert(string name, int age, string occupation, string *friends, int friendarraysize)  //determine array index
+{
   index = hash(name);
-  while (array[index].name != "") {
-    if (array[index].name == name) {
-      cout<<"user already exists in system"<<endl;
-      return;
+  while (array[index].name != "")
+    {
+      if (array[index].name == name) 
+	{
+	  cout<<"user already exists in system"<<endl;
+	  return;
+	}
+      if (index + 1 == TABLE_SIZE)
+	{
+	  index = 0;
+	} else 
+	{
+	  index++;
+	}
     }
-    if (index + 1 == TABLE_SIZE) {
-      index = 0;
-    } else {
-      index++;
-    }
-  }
   //write to profile data
   FILE * pFile;
   pFile = fopen("ProfileData.txt", "w");
@@ -45,9 +50,10 @@ void AdjacencyList::insert(string name, int age, string occupation, string *frie
 }
 int AdjacencyList::hash(string str, int seed = 0) {
   int hash = seed;
-  for (int i = 0;i < str.length();i++) {
-    hash = hash * 101 + str[i];
-  }
+  for (int i = 0;i < str.length();i++)
+    {
+      hash = hash * 101 + str[i];
+    }
   return hash % TABLE_SIZE;
 }
 

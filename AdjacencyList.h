@@ -4,7 +4,8 @@
 #include "AdjListObject.h"
 #include <string>
 
-class AdjacencyList {
+class AdjacencyList 
+{
  public:
   AdjacencyList();
   void AdjacencyList::insert(std::string name, int age, std::string occupation, std::string *friends, int friendarraysize);

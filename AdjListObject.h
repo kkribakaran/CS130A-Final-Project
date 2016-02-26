@@ -2,12 +2,14 @@
 #define ADJLISTOBJECT_H
 #include <string>
 
-struct Node {
+struct Node 
+{
   std::string Name;
   Node* next;
 };
 
-class AdjListObject {
+class AdjListObject 
+{
  public:
   AdjListObject{};
   std::string getName();
