@@ -15,12 +15,14 @@ class AdjListObject
     std::string name;
     FriendNode* next;
   };
-  //constructor
+  //constructors
   AdjListObject();
-
+  AdjListObject(std::string name, int profileDataIndex);
+  
   //getters and setters
   std::string getName();
   int getProfileDataIndex();
+  FriendNode* getRoot();
   void setName(std::string name);
   void setProfileDataIndex(int index);
 

@@ -10,6 +10,12 @@ AdjListObject::AdjListObject()
   profileDataIndex = -10;
   root = NULL;
 }
+AdjListObject::AdjListObject(string name, int profileDataIndex)
+{
+  this->name = name;
+  this->profileDataIndex = profileDataIndex;
+  root = NULL;
+}
 //getter for name
 string AdjListObject::getName()
 {
@@ -19,6 +25,10 @@ string AdjListObject::getName()
 int AdjListObject::getProfileDataIndex() 
 {
   return profileDataIndex;
+}
+AdjListObject::FriendNode* AdjListObject::getRoot()
+{
+  return root;
 }
 //setter for name
 void AdjListObject::setName(string name) 
@@ -34,7 +44,7 @@ void AdjListObject::setProfileDataIndex(int index)
 void AdjListObject::addFriend(string friendName) 
 {
   //create the friend node
-  FriendNode* friendNode;
+  FriendNode* friendNode = new FriendNode();
   friendNode->name = friendName;
   friendNode->next = NULL;
 
@@ -42,11 +52,17 @@ void AdjListObject::addFriend(string friendName)
      Iterate through linked list until we get to the end
      and put the friend at the end
   **/
-  struct FriendNode* temp = root;
-  while (temp->next) 
+  FriendNode* temp = root;
+  //if there are currently no friends, add the first friend
+  if(!temp)
+    root = friendNode;
+  else
     {
-      temp = temp->next;
+      while (temp->next) 
+	{
+	  temp = temp->next;
+	}
+      temp->next = friendNode;
     }
-  temp->next = friendNode;
 }
 
