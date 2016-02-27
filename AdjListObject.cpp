@@ -1,39 +1,48 @@
 #include "AdjListObject.h"
 #include <string>
 
+using namespace std;
+
+//constructor
 AdjListObject::AdjListObject()
 {
   name = "";
   profileDataIndex = -10;
   root = NULL;
 }
-
-std::string AdjListObject::getName()
+//getter for name
+string AdjListObject::getName()
 {
   return name;
 }
-
+//getter for profileDataIndex
 int AdjListObject::getProfileDataIndex() 
 {
-  return int;
+  return profileDataIndex;
 }
-
-void AdjListObject::setName(std::string name) 
+//setter for name
+void AdjListObject::setName(string name) 
 {
   this->name = name; 
 }
-
+//setter for profileDataIndex
 void AdjListObject::setProfileDataIndex(int index) 
 {
   this->profileDataIndex = index;
 }
-
-void AdjListObject::addFriend(std::string friend) 
+//Adds a friend to this person
+void AdjListObject::addFriend(string friendName) 
 {
-  Node* temp = root;
-  Node* friendNode;
-  friendNode.name = friend;
-  friendNode.next = NULL; 
+  //create the friend node
+  FriendNode* friendNode;
+  friendNode->name = friendName;
+  friendNode->next = NULL;
+
+  /**
+     Iterate through linked list until we get to the end
+     and put the friend at the end
+  **/
+  struct FriendNode* temp = root;
   while (temp->next) 
     {
       temp = temp->next;
