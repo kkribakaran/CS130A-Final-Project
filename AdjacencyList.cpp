@@ -9,12 +9,12 @@ using namespace std;
 
 AdjacencyList::AdjacencyList()
 {
-  array = new AdjListObject[211]; 
+  array = new AdjListObject[TABLE_SIZE]; 
   filled = 0;
-  TABLE_SIZE = 211;
 }
-void AdjacencyList::insert(string name, int age, string occupation, string *friends, int friendarraysize)  //determine array index
+void AdjacencyList::insert(string name, int age, string occupation, string *friends, int friendarraysize)
 {
+  //determine array index
   index = hash(name);
   while (array[index].name != "")
     {

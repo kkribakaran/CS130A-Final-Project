@@ -4,6 +4,8 @@
 #include "AdjListObject.h"
 #include <string>
 
+#define TABLE_SIZE 211
+
 class AdjacencyList 
 {
  public:
@@ -15,7 +17,6 @@ class AdjacencyList
   
  private:
   int filled;
-  int TABLE_SIZE;
   AdjListObject* array;
 };
 #endif
