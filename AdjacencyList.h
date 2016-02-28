@@ -5,18 +5,22 @@
 #include <string>
 
 #define TABLE_SIZE 211
+#define OVERALL_OFFSET 53
+#define AGE_OFFSET 20
+#define OCCUPATION_OFFSET 23
 
+//This class represents the adjacency list
 class AdjacencyList 
 {
  public:
   AdjacencyList();
-  void AdjacencyList::insert(std::string name, int age, std::string occupation, std::string *friends, int friendarraysize);
+  void insert(std::string name, int age, std::string occupation, std::string *friends, int friendarraysize);
   int hash(std::string str, int seed = 0);
   void search(std::string name);
   void print(int index);
   
  private:
-  int filled;
+  int numElements;
   AdjListObject* array;
 };
 #endif
