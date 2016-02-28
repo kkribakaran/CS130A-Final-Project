@@ -20,12 +20,17 @@ vector<string> split(string str, char delimiter)
 
 	return internal;
 }
-int main()
+int main(int argc, char* argv[])
 {
+  if(argc < 2)
+    {
+      cout<<"Please input a text file"<<endl;
+      return 0;
+    }
   AdjacencyList list;
-
   ifstream f;
-  f.open("input.txt", ios::in);
+  f.open(argv[1], ios::in);
+  
   if(!f) cerr << "File not found" << endl;
   else
     {
@@ -36,7 +41,7 @@ int main()
 	  vector<string> friends;
 	  for(int i = 3; i < (int)words.size(); i++)
 	    friends.push_back(words.at(i));
-	  list.insert(words[0],words[1],words[2],friends,friends.size());
+	  list.insert(words.at(0),words.at(1),words.at(2),friends,(int)friends.size());
 	}
     }
   return 0;
