@@ -3,6 +3,7 @@
 
 #include "AdjListObject.h"
 #include <string>
+#include <vector>
 
 #define TABLE_SIZE 211
 #define OVERALL_OFFSET 53
@@ -13,8 +14,12 @@
 class AdjacencyList 
 {
  public:
+  //constructor
   AdjacencyList();
-  void insert(std::string name, int age, std::string occupation, std::string *friends, int friendarraysize);
+
+  //Inserts a new entry into the list and the profile data
+  void insert(std::string name, std::string age, std::string occupation,std::vector<std::string> friends, int friendArraySize);
+  //the hash function
   int hash(std::string str, int seed = 0);
   void search(std::string name);
   void print(int index);
