@@ -19,6 +19,7 @@ class AdjacencyList
 
   //Inserts a new entry into the list and the profile data
   void insert(std::string name, std::string age, std::string occupation,std::vector<std::string> friends, int friendArraySize);
+  
   //the hash function
   int hash(std::string str, int seed = 0);
   void search(std::string name);
@@ -27,5 +28,7 @@ class AdjacencyList
  private:
   int numElements;
   AdjListObject* array;
+
+  int getHashedIndex(std::string name);
 };
 #endif
