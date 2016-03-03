@@ -23,7 +23,7 @@ void AdjacencyList::insert(string name, string age, string occupation,vector< st
      If original spot is filled, keep updating index until you 
      find an empty spot or if the name is already in the list
   **/
-  while (array[index].getName() != "")
+  while (numElements != 0 && array[index].getName() != "")
     {
       if (array[index].getName() == name) 
 	{
@@ -35,6 +35,7 @@ void AdjacencyList::insert(string name, string age, string occupation,vector< st
       else 
 	  index++;
     }
+  
   //write to profile data
   FILE * pFile;
   pFile = fopen("ProfileData.txt", "r+");
@@ -60,18 +61,20 @@ void AdjacencyList::insert(string name, string age, string occupation,vector< st
   //add to hashtable
   AdjListObject newEntry(name, offset);
   array[index] = newEntry;
+  numElements++;
 
   //add all the friends
-  for(int i = 0; i <friendArraySize; i++) 
+  for(int i = 0; i <(int)friendArraySize; i++) 
     array[index].addFriend(friends.at(i));
 }
+
 //the hash function
 int AdjacencyList::hash(string str, int seed) {
   int hash = seed;
   for (int i = 0;i < (int) str.length();i++)
-      hash = hash * 101 + str[i];
+    hash = (hash * 101 + str[i]) % TABLE_SIZE;
   
-  return hash % TABLE_SIZE;
+  return hash;
 }
 
 void AdjacencyList::search(string name) {
