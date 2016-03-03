@@ -31,7 +31,8 @@ int main(int argc, char* argv[])
   ifstream f;
   f.open(argv[1], ios::in);
   
-  if(!f) cerr << "File not found" << endl;
+  if(!f)
+    cerr << "File not found" << endl;
   else
     {
       string line;
@@ -39,7 +40,7 @@ int main(int argc, char* argv[])
 	{
 	  vector<string> words = split(line, ',');
 	  vector<string> friends;
-	  for(int i = 3; i < (int)words.size(); i++)
+	  for(int i = 3; i < (int) words.size(); i++)
 	    friends.push_back(words.at(i));
 	  list.insert(words.at(0),words.at(1),words.at(2),friends,(int)friends.size());
 	}
