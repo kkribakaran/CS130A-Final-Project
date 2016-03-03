@@ -37,29 +37,17 @@ void AdjacencyList::insert(string name, string age, string occupation,vector< st
     }
 
 
-
-  ofstream profileData;
-  profileData.open("ProfileData.txt");
-  int offset = OVERALL_OFFSET * numElements;
-  profileData.seekp(offset);
-  profileData.write(name.c_str(),name.size());
-  profileData.seekp(offset + AGE_OFFSET);
-  profileData.write(age.c_str(),age.size());
-  profileData.seekp(offset + OCCUPATION_OFFSET);
-  profileData.write(occupation.c_str(),occupation.size());
-  profileData.close();
   //write to profile data
-  /**
   FILE * pFile;
   pFile = fopen("ProfileData.txt", "r+");
   if(!pFile)
     pFile = fopen("ProfileData.txt", "w");
   
- 
+  /**
      Go to the next emtpy spot in the file by
      multiplying the overall offset by the
      number of elements
-  
+  **/
   int offset = OVERALL_OFFSET * numElements;
   //write the name in
   fseek(pFile,offset,SEEK_SET);
@@ -71,7 +59,7 @@ void AdjacencyList::insert(string name, string age, string occupation,vector< st
   fseek(pFile,offset + OCCUPATION_OFFSET,SEEK_SET);
   fputs(occupation.c_str(),pFile);
   fclose(pFile);
-  **/
+  
   //add to hashtable
   AdjListObject newEntry(name, offset);
   array[index] = newEntry;
