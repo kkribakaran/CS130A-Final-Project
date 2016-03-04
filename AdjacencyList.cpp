@@ -18,12 +18,11 @@ void AdjacencyList::insert(string name, string age, string occupation,vector< st
 {
   //determine original index that name is hashed to
   int index = hash(name);
-
   /**
      If original spot is filled, keep updating index until you 
      find an empty spot or if the name is already in the list
   **/
-  while (numElements != 0 && array[index].getName() != "")
+  while (array[index].getName() != "")
     {
       if (array[index].getName() == name) 
 	{
@@ -37,7 +36,7 @@ void AdjacencyList::insert(string name, string age, string occupation,vector< st
 	  index++;
     }
 
-
+  
   //write to profile data
   FILE * profileData;
   profileData = fopen("ProfileData.txt", "r+");
@@ -62,13 +61,15 @@ void AdjacencyList::insert(string name, string age, string occupation,vector< st
   fclose(profileData);
   
   //add to hashtable
-  AdjListObject newEntry(name, offset);
-  array[index] = newEntry;
-  numElements++;
-
+  array[index].setName(name);
+  array[index].setProfileDataIndex(numElements);
+  
   //add all the friends
-  for(int i = 0; i <(int)friendArraySize; i++) 
+  for(int i = 0; i <(int)friendArraySize; i++) {
     array[index].addFriend(friends.at(i));
+  }
+
+  numElements++;
 }
 
 //the hash function
@@ -77,14 +78,11 @@ int AdjacencyList::hash(string str, int seed)
   int hash = seed;
   for (int i = 0;i < (int) str.length();i++)
     hash = (hash * 101 + str[i]) % TABLE_SIZE;
-  
   return hash;
 }
 
 void AdjacencyList::listFriendsInfo(string name) {
-  
   int index = getHashedIndex(name);
-  
   /**
      If the original hashed index is empty, it means
      the name isn't in the network
@@ -94,31 +92,56 @@ void AdjacencyList::listFriendsInfo(string name) {
       cout<<"Name not found"<<endl;
       return; 
     }
-  
+ 
   //print the friends' info
   AdjListObject currentObject = array[index];
-  FriendNode* friendsList = currentObject.getRoot();
-  for(FriendNode* p = friendsList; p != NULL; p = p->next)
-    print(p->getName());
+  AdjListObject::FriendNode* friendsList = currentObject.getRoot();
+  for(AdjListObject::FriendNode* p = friendsList; p != NULL; p = p->next)
+    {
+      //call print function on friend's name
+      print(p->name);
+    }
 }
+
 //Print the name, age, and occupation of the given name
 void AdjacencyList::print(string name) {
   int index = getHashedIndex(name);
-  AdjacencyListObject printedObject = array[index];
+  if (index == -1) 
+    {
+      cout<<name<<" not found"<<endl;
+      return;
+    }
+  AdjListObject printedObject = array[index];
+ 
+  //open ProfileData.txt
   FILE * profileData;
   profileData = fopen("ProfileData.txt", "r");
-  fseek(profileData,printedObject.getProfileDataIndex,SEEK_SET);
   
+  //calculate offset based on profiledata index
+  int offset = OVERALL_OFFSET * printedObject.getProfileDataIndex();
+  char age[3];
+  char occupation[30];
+
+  //seek and read data to variables.
+  fseek(profileData,offset + AGE_OFFSET,SEEK_SET);
+  fgets(age,3,profileData);
+  fseek(profileData,offset + OCCUPATION_OFFSET,SEEK_SET);
+  fgets(occupation,30,profileData);
+
+  cout<<name<<", "<<age<<", "<<occupation<<endl;  
 }
-int AdjacenyList::getHashedIndex(string name)
+
+int AdjacencyList::getHashedIndex(string name)
 {
   int originalIndex = hash(name);
   if(array[originalIndex].getName() == "")
     return -1;
   
   //use linear probing if name at original index doesn't match
-  while (array[originalIndex].getName() != "")
+  while (array[originalIndex].getName() != name)
     {
+      if (array[originalIndex].getName() == "") 
+	return -1;
       //loop around array if it reaches the end
       if (originalIndex + 1 == TABLE_SIZE)
 	  originalIndex = 0;

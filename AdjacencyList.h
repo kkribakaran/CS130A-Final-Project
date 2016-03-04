@@ -23,8 +23,8 @@ class AdjacencyList
   //the hash function
   int hash(std::string str, int seed = 0);
   void search(std::string name);
-  void print(int index);
-  
+  void print(std::string name);
+  void listFriendsInfo(std::string name);
  private:
   int numElements;
   AdjListObject* array;

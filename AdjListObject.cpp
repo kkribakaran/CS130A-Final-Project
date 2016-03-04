@@ -1,15 +1,16 @@
 #include "AdjListObject.h"
 #include <string>
-
 using namespace std;
 
 //constructor
+
 AdjListObject::AdjListObject()
 {
   name = "";
   profileDataIndex = -10;
   root = NULL;
 }
+
 AdjListObject::AdjListObject(string name, int profileDataIndex)
 {
   this->name = name;
