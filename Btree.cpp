@@ -13,12 +13,12 @@ void Btree::insert(string name, int index)
   }
   Node * temp = root;
   while (!temp->isLeaf) {
-    if (name > temp->key[temp->keycount]) {
-      temp = temp->children[temp->keycount + 1]
-	}
+    if (name > temp->keys[temp->keycount]) {
+      temp = temp->children[temp->keycount + 1];
+    }
     else { 
       for (int i = -1; i <temp->keycount; i++) {
-	if (name < temp->key[i]) {
+	if (name < temp->keys[i]) {
 	  temp = temp->children[i]
 	    break;
 	}
@@ -29,10 +29,41 @@ void Btree::insert(string name, int index)
   p->name = name;
   p->index = index;
   if (temp->leafCount ==3) {
-    Node *n = new Node();
-    n->isLeaf = true;
-    n->
+    int i;
+    for (i = 0; i < 3; i++) {
+      if (name < temp->leaf[i]) {
+	break;
       }
+    }
+    if (i==3) {
+      temp->leaf[3] = p;
+    } else {
+      for (int j = 3; j > i; j--) {
+	temp->leaf[j] = temp->leaf[j-1];
+      }
+      temp->leaf[i] = p;
+    }
+    Node* split = new Node();
+    split->isLeaf = true;
+    split->leaf[0] = temp->leaf[2];
+    split->leaf[1] = temp->leaf[3];
+    split->leafCount = 2;
+    temp->leafCount = 2;
+    split->parent = temp->parent;
+    if (!temp->parent) {
+      Node *parent = new Node();
+      parent->isLeaf = false;
+      parent->key[0] = split->leaf[0].name;
+      parent->children[0] = temp;
+      parent->children[1] = split;
+      temp->parent = parent;
+      split->parent = parent;
+
+    } else {
+      siftUp(temp->parent,split->leaf[0].name,split);
+    }
+    
+  }
   else {
     
     if (name < leaf[0].name) {
@@ -45,6 +76,7 @@ void Btree::insert(string name, int index)
     } else {
       leaf[2] = p;
     }
+    temp->leafCount++;
   }
 }
 
@@ -59,11 +91,7 @@ void Btree::rangeQuery(string a, string b)
 
 
 void Btree::siftUp(Node * x, string name, Node * n) {
-  if (x == NULL) {
-    Node *k = new Node();
-    k->isLeaf = false;
-
-  }
+  
   Node *p = x->parent;
   int i;
   for (i = 0; i < x->keycount; i++) {
@@ -94,7 +122,7 @@ void Btree::siftUp(Node * x, string name, Node * n) {
       parent->children[0] = x;
       parent->children[1] = k;
       parent->keys[0] = x->keys[2]
-	root = parent;
+      root = parent;
     } else {
       string parentname = x->keys[2];
 
