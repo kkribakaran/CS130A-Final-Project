@@ -14,7 +14,9 @@ AdjacencyList::AdjacencyList()
   array = new AdjListObject[TABLE_SIZE]; 
   numElements = 0;
 }
-void AdjacencyList::insert(string name, string age, string occupation,vector< string> friends, int friendArraySize)
+
+
+void AdjacencyList::insert(string name, string age, string occupation, vector<string> friends, int friendArraySize)
 {
   //determine original index that name is hashed to
   int index = hash(name);
@@ -100,17 +102,15 @@ void AdjacencyList::listFriendsInfo(string name) {
     {
       //call print function on friend's name
       print(p->name);
+      cout<<endl;
     }
 }
 
 //Print the name, age, and occupation of the given name
+//Precondition: All of friends are in Adjacency List
 void AdjacencyList::print(string name) {
   int index = getHashedIndex(name);
-  if (index == -1) 
-    {
-      cout<<name<<" not found"<<endl;
-      return;
-    }
+
   AdjListObject printedObject = array[index];
  
   //open ProfileData.txt
@@ -128,7 +128,19 @@ void AdjacencyList::print(string name) {
   fseek(profileData,offset + OCCUPATION_OFFSET,SEEK_SET);
   fgets(occupation,30,profileData);
 
-  cout<<name<<", "<<age<<", "<<occupation<<endl;  
+  cout<<name<<","<<age<<","<<occupation;  
+}
+
+
+void AdjacencyList::addFriend(string friend1, string friend2)
+{
+  //get indexes of each friend
+  int friend1index = getHashedIndex(friend1);
+  int friend2index = getHashedIndex(friend2);
+  
+  array[friend1index].addFriend(friend2);
+  array[friend2index].addFriend(friend1);
+  
 }
 
 int AdjacencyList::getHashedIndex(string name)
@@ -149,4 +161,22 @@ int AdjacencyList::getHashedIndex(string name)
 	  originalIndex++;
     }
   return originalIndex;
+}
+
+void AdjacencyList::printAll() 
+{
+  for (int i = 0; i < 211; i++)
+    {
+      if (array[i].getName() != "") 
+	{
+	  print(array[i].getName());
+	  AdjListObject::FriendNode* currentFriend = array[i].getRoot();
+	  while (currentFriend)
+	    {
+	      cout<<","<<currentFriend->name;
+	      currentFriend=currentFriend->next;
+	    }
+	  cout<<endl;
+	}
+    }
 }
