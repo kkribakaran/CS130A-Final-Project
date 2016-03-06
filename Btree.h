@@ -1,6 +1,9 @@
 #ifndef BTREE_H
 #define BTREE_H
 #include <string>
+#define OVERALL_OFFSET 53
+#define AGE_OFFSET 20
+#define OCCUPATION_OFFSET 23
 
 //This struct reperesents a Person in the B-tree, has name and index in ProfileData 
 struct Person
@@ -24,31 +27,29 @@ struct Node
   int leafCount; //number of Person objects in leaf
   Node* next; //pointer to next leafNode
   //ifInternalNode
-  Node* children[6]; //6 pointers to children nodes (5 + 1 because we accomodate extra space for splitting)
+  Node** children; //6 pointers to children nodes (5 + 1 because we accomodate extra space for splitting)
   std::string* keys; //5 string pointers, each string represents a key (4+1)
   int keycount; //number of keys in node
   Node()//constructor for node
     {
-      std::string* keys = new std::string[5];
       int leafCount = 0;
       int keyCount = 0;
       parent = NULL;
-      for (int i = 0; i < 5; i++)
-	{
-	  keys[i] = "";
-	}
+      next = NULL;
+      
     } 
 };
 
 class Btree{
-  public:
+ public:
   void insert(std::string name, int index); //inserts new person with given name and index in to b tree 
-  void rangequery(std::string a, std::string b); //prints out names of all users from a to b
-        
-  private:
-    Node* root;
-    void siftup(Node *x, std::string name, Node *n); //helper function for insert, x is is Node we are trying to insert to, name is the new key we need to add, n is the node we need to add
-
+  void rangeQuery(std::string nameLowerBound, std::string nameUpperBound); //prints out names of all users from a to b
+  void rangeQueryHelper(Node* currentNode, std::string nameUpperBound);
+  void print(int index);
+ private:
+  Node* root;
+  void siftUp(Node *x, std::string name, Node *n); //helper function for insert, x is is Node we are trying to insert to, name is the new key we need to add, n is the node we need to add
+  
 
 };
 
