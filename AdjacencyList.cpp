@@ -15,8 +15,17 @@ AdjacencyList::AdjacencyList()
   numElements = 0;
 }
 
+void AdjacencyList::initInsert(string name, string age, string occupation,vector<string> friends, int friendArraySize)
+{
+  insert(name,age,occupation);
+  //add all the friends
+  int index = getHashedIndex(name);
+  for(int i = 0; i <(int)friendArraySize; i++) {
+    array[index].addFriend(friends.at(i));
+  }
 
-void AdjacencyList::insert(string name, string age, string occupation, vector<string> friends, int friendArraySize)
+}
+void AdjacencyList::insert(string name, string age, string occupation)
 {
   //determine original index that name is hashed to
   int index = hash(name);
@@ -65,11 +74,6 @@ void AdjacencyList::insert(string name, string age, string occupation, vector<st
   //add to hashtable
   array[index].setName(name);
   array[index].setProfileDataIndex(numElements);
-  
-  //add all the friends
-  for(int i = 0; i <(int)friendArraySize; i++) {
-    array[index].addFriend(friends.at(i));
-  }
 
   numElements++;
 }
