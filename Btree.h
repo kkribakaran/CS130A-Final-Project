@@ -29,11 +29,11 @@ struct Node
   //ifInternalNode
   Node** children; //6 pointers to children nodes (5 + 1 because we accomodate extra space for splitting)
   std::string* keys; //5 string pointers, each string represents a key (4+1)
-  int keycount; //number of keys in node
+  int keyCount; //number of keys in node
   Node()//constructor for node
     {
-      int leafCount = 0;
-      int keyCount = 0;
+      leafCount = 0;
+      keyCount = 0;
       parent = NULL;
       next = NULL;
       

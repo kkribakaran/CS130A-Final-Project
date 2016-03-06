@@ -7,13 +7,15 @@ using namespace std;
 void Btree::insert(string name, int index)
 {
   //if Btree is empty, create new leaf node, put person in first index
-  if (root = NULL)
+  if (root == NULL)
   {
     Node* leafNode = new Node();
     leafNode->isLeaf = true;
     leafNode->leaf = new Person[4];
     leafNode->leaf[0].name = name;
     leafNode->leaf[0].index = index;
+    leafNode->leafCount = 1;
+    root = leafNode;
   }
 
   //traverse Btree to leaf to insert
@@ -21,14 +23,14 @@ void Btree::insert(string name, int index)
   while (!(currentNode->isLeaf))
     {
       //if name is greater than the greatest key in Node, traverse to last child
-      if (name > currentNode->keys[currentNode->keycount - 1])
+      if (name > currentNode->keys[currentNode->keyCount - 1])
 	{
-	  currentNode = currentNode->children[currentNode->keycount];
+	  currentNode = currentNode->children[currentNode->keyCount];
 	}
       //find out which child to traverse to
       else
 	{
-	  for (int i = 0; i <currentNode->keycount; i++)
+	  for (int i = 0; i <currentNode->keyCount; i++)
 	    {
 	      if (name < currentNode->keys[i])
 		{
@@ -71,6 +73,7 @@ void Btree::insert(string name, int index)
       Node* split = new Node();
       split->isLeaf = true;
       split->leaf = new Person[4];
+
       split->leaf[0] = currentNode->leaf[2];
       split->leaf[1] = currentNode->leaf[3];
       split->leafCount = 2;
@@ -88,6 +91,7 @@ void Btree::insert(string name, int index)
 	  parent->children = new Node*[6];
 	  
 	  parent->keys[0] = split->leaf[0].name;
+	  parent->keyCount = 1;
 	  parent->children[0] = currentNode;
 	  parent->children[1] = split;
 	  currentNode->parent = parent;
@@ -96,6 +100,7 @@ void Btree::insert(string name, int index)
       } 
       else  //otherwise call siftup and recurse upwards 
 	{ 
+	  
 	  siftUp(currentNode->parent,split->leaf[0].name,split);
 	}
       
@@ -119,6 +124,7 @@ void Btree::insert(string name, int index)
 	currentNode->leaf[2].index = index;
       }
     currentNode->leafCount++;
+    
   }
 }
 
@@ -153,14 +159,14 @@ void Btree::rangeQuery(string nameLowerBound, string nameUpperBound)
   while (!(currentNode->isLeaf))
     {
       //if name is greater than the greatest key in Node, traverse to last child
-      if (nameLowerBound > currentNode->keys[currentNode->keycount - 1])
+      if (nameLowerBound >= currentNode->keys[currentNode->keyCount - 1])
         {
-          currentNode = currentNode->children[currentNode->keycount];
+          currentNode = currentNode->children[currentNode->keyCount];
         }
       //find out which child to traverse to
       else
         {
-          for (int i = 0; i <currentNode->keycount; i++)
+          for (int i = 0; i <currentNode->keyCount; i++)
             {
               if (nameLowerBound < currentNode->keys[i])
                 {
@@ -171,22 +177,25 @@ void Btree::rangeQuery(string nameLowerBound, string nameUpperBound)
         }
     }
   //find the index where lower bound begins
-  int i;
-  for (i = 0; i < currentNode->leafCount; i++)
+  int index = 0;
+  for (int i = 0; i < currentNode->leafCount; i++)
     {
-      if (nameLowerBound >= currentNode->leaf[i].name)
-	break;
+      if (nameLowerBound <= currentNode->leaf[i].name)
+	{
+	  index = i;
+	  break;
+	}
     }
   //print out people starting at lower bound
-  while (i < currentNode->leafCount)
+  while (index < currentNode->leafCount)
     {
       //if it hits upper bound in same leaf
-      if (nameUpperBound < currentNode->leaf[i].name)
+      if (nameUpperBound < currentNode->leaf[index].name)
 	{
 	  return;
 	}
-      print(currentNode->leaf[i].index);
-      i++;
+      print(currentNode->leaf[index].index);
+      index++;
     }
   //call helper function with currentNode->next until it reaches upper bound
   rangeQueryHelper(currentNode->next, nameUpperBound);
@@ -200,7 +209,6 @@ void Btree::rangeQueryHelper(Node* currentNode, string nameUpperBound)
   //if null, then return
   if (!currentNode)
     return;
-
   //iterate through all the Person objects in the leaf
   for (int i = 0; i < currentNode->leafCount;i++)
     {
@@ -221,13 +229,13 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
 {
   //find out where keyInsert goes in currentNode
   int i;
-  for (i = 0; i < currentNode->keycount; i++)
+  for (i = 0; i < currentNode->keyCount; i++)
     {
       if (keyInsert < currentNode->keys[i]) 
 	break;
     }
   //shift keys and children to make room for new key and child
-  for (int j = currentNode->keycount; j > i; j--) 
+  for (int j = currentNode->keyCount; j > i; j--) 
     {
       currentNode->children[j+1] = currentNode->children[j];
       currentNode->keys[j] = currentNode->keys[j-1];
@@ -235,10 +243,10 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
   //insert child and key
   currentNode->children[i+1] = nodeInsert;
   currentNode->keys[i] = keyInsert;
-  currentNode->keycount++;
+  currentNode->keyCount++;
   
   //if Node is full
-  if (currentNode->keycount == 5) 
+  if (currentNode->keyCount == 5) 
     {
       Node *splitNode = new Node();
       splitNode->isLeaf = false;
@@ -254,8 +262,8 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
 	}
       splitNode->children[2] = currentNode->children[5];
       
-      splitNode->keycount = 2;
-      currentNode->keycount = 2;
+      splitNode->keyCount = 2;
+      currentNode->keyCount = 2;
       //if parent of currentNode is null, create new parent node
       if (currentNode->parent == NULL)
 	{
@@ -263,13 +271,13 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
 	  parent->isLeaf = false;
 	  parent->keys = new string[5];
 	  parent->children = new Node*[6];
-	  
 	  currentNode->parent = parent;
 	  splitNode->parent = parent;
 	  parent->children[0] = currentNode;
 	  parent->children[1] = splitNode;
 	  parent->keys[0] = currentNode->keys[2];
 	  root = parent;
+	  parent->keyCount = 1;
 	}
       //if parent is not null, recurse to parent node
       else 
