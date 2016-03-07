@@ -46,6 +46,8 @@ class Btree{
   void rangeQuery(std::string nameLowerBound, std::string nameUpperBound); //prints out names of all users from a to b
   void rangeQueryHelper(Node* currentNode, std::string nameUpperBound);
   void print(int index);
+  void printTree();
+  void printTreeHelper(Node* root);
  private:
   Node* root;
   void siftUp(Node *x, std::string name, Node *n); //helper function for insert, x is is Node we are trying to insert to, name is the new key we need to add, n is the node we need to add

@@ -16,6 +16,7 @@ void Btree::insert(string name, int index)
     leafNode->leaf[0].index = index;
     leafNode->leafCount = 1;
     root = leafNode;
+    return;
   }
 
   //traverse Btree to leaf to insert
@@ -23,7 +24,7 @@ void Btree::insert(string name, int index)
   while (!(currentNode->isLeaf))
     {
       //if name is greater than the greatest key in Node, traverse to last child
-      if (name > currentNode->keys[currentNode->keyCount - 1])
+      if (name >= currentNode->keys[currentNode->keyCount - 1])
 	{
 	  currentNode = currentNode->children[currentNode->keyCount];
 	}
@@ -40,35 +41,28 @@ void Btree::insert(string name, int index)
 	    }
 	}
     }
-  
-  //if leaf is full
-  if (currentNode->leafCount ==3)
+  //find out where new person goes in leaf array
+  int i;
+  for (i = 0; i < currentNode->leafCount; i++)
     {
-      //find out which index new person should be inserted
-      int i;
-      for (i = 0; i < 3; i++)
-	{
-	  if (name < currentNode->leaf[i].name)
-	    {
-	      break;
-	    }
-	}
-      //if name is greater than any of the values
-      if (i==3) 
-	{
-	  currentNode->leaf[3].name = name;
-	  currentNode->leaf[3].index = index;
-	} 
-      else 
-	{
-	  for (int j = 3; j > i; j--)
-	    {
-	      currentNode->leaf[j] = currentNode->leaf[j-1];
-	    }
-	  currentNode->leaf[i].name = name;
-	  currentNode->leaf[i].index = index;
-	}
+      if (name < currentNode->leaf[i].name)
+        break;
+    }
+  //shift people in leaf array to make room for new person
+  for (int j = currentNode->leafCount; j > i; j--)
+    {
+      currentNode->leaf[j] = currentNode->leaf[j-1];
+    }
+  //insert person
+  currentNode->leaf[i].name = name;
+  currentNode->leaf[i].index = index;
+  currentNode->leafCount++;
+  
 
+  //if leaf is full
+  if (currentNode->leafCount ==4)
+    {
+      
       //create new leaf Node and split
       Node* split = new Node();
       split->isLeaf = true;
@@ -105,27 +99,6 @@ void Btree::insert(string name, int index)
 	}
       
     }
-  //current leaf node isn't full, so insert person directly, no splitting
-  else {
-    if (currentNode->leafCount == 1)
-      {
-	currentNode->leaf[1].name = name;
-	currentNode->leaf[1].index = index;
-      }
-    else if (name < currentNode->leaf[1].name) 
-      {
-	currentNode->leaf[2] = currentNode->leaf[1];
-	currentNode->leaf[1].name = name;
-	currentNode->leaf[1].index = index;
-      }
-    else 
-      {
-	currentNode->leaf[2].name = name;
-	currentNode->leaf[2].index = index;
-      }
-    currentNode->leafCount++;
-    
-  }
 }
 
 void Btree::print(int index)
@@ -244,7 +217,7 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
   currentNode->children[i+1] = nodeInsert;
   currentNode->keys[i] = keyInsert;
   currentNode->keyCount++;
-  
+
   //if Node is full
   if (currentNode->keyCount == 5) 
     {
@@ -264,6 +237,7 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
       
       splitNode->keyCount = 2;
       currentNode->keyCount = 2;
+
       //if parent of currentNode is null, create new parent node
       if (currentNode->parent == NULL)
 	{
@@ -285,4 +259,26 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
 	  siftUp(currentNode->parent,currentNode->keys[2],splitNode);
 	}
     }
+}
+
+void Btree::printTree()
+{
+  printTreeHelper(root);
+}
+
+void Btree::printTreeHelper(Node* currentNode)
+{
+  if (currentNode->isLeaf)
+    return;
+  for(int i = 0; i <currentNode->keyCount;i++)
+    {
+      cout<<currentNode->keys[i]<<" ";
+    }
+  cout<<endl;
+  for(int i = 0; i <=currentNode->keyCount;i++)
+    {
+      cout<<i<<": ";
+      printTreeHelper(currentNode->children[i]);
+    }
+
 }
