@@ -241,8 +241,8 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
       splitNode->isLeaf = false;
       splitNode->keys = new string[5];
       splitNode->children = new Node*[6];
-      
-      
+      splitNode->parent = currentNode->parent;
+   
       /**
 	 currentNode currently has 5 keys and 6 children
 	 Need to copy last 2 keys of currentNode into splitNode
@@ -259,6 +259,12 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
       //update keyCounts
       splitNode->keyCount = 2;
       currentNode->keyCount = 2;
+
+      for (int j = 0; j <= 2; j++)
+	{
+	  currentNode->children[j]->parent = currentNode;
+	  splitNode->children[j]->parent = splitNode;
+	}
 
       //if parent of currentNode is null, create new parent node
       if (currentNode->parent == NULL)
@@ -285,13 +291,22 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
 
 void Btree::printTree()
 {
-  printTreeHelper(root);
+  printTreeHelper(root, 0);
 }
 
-void Btree::printTreeHelper(Node* currentNode)
+void Btree::printTreeHelper(Node* currentNode, int level)
 {
   if (currentNode->isLeaf)
-    return;
+    {
+      cout<<level<<" ";
+      for (int i = 0; i < currentNode->leafCount; i++)
+	{
+	  cout<<currentNode->leaf[i].name<<" ";
+	}
+      cout<<endl;
+      return;
+    }  
+cout<<level<<" ";
   for(int i = 0; i <currentNode->keyCount;i++)
     {
       cout<<currentNode->keys[i]<<" ";
@@ -299,8 +314,8 @@ void Btree::printTreeHelper(Node* currentNode)
   cout<<endl;
   for(int i = 0; i <=currentNode->keyCount;i++)
     {
-      cout<<i<<": ";
-      printTreeHelper(currentNode->children[i]);
+      
+      printTreeHelper(currentNode->children[i], level+1);
     }
 
 }

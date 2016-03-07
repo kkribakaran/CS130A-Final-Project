@@ -47,7 +47,7 @@ class Btree{
   void rangeQueryHelper(Node* currentNode, std::string nameUpperBound);
   void print(int index);
   void printTree();
-  void printTreeHelper(Node* root);
+  void printTreeHelper(Node* root, int level);
  private:
   Node* root;
   
