@@ -50,7 +50,13 @@ class Btree{
   void printTreeHelper(Node* root);
  private:
   Node* root;
-  void siftUp(Node *x, std::string name, Node *n); //helper function for insert, x is is Node we are trying to insert to, name is the new key we need to add, n is the node we need to add
+  
+  //helper function for insert
+  //currentNode is the node we are currently at
+  //keyInsert is the new key we need to add
+  //nodeInsert is the newly split node we need to add, will eventually
+  //become a child of currentNode
+  void siftUp(Node *currentNode, std::string keyInsert, Node *nodeInsert);
   
 
 };
