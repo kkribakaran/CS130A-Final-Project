@@ -131,6 +131,49 @@ void Btree::print(int index)
   cout<<name<<","<<age<<","<<occupation<<endl;
 }
 
+void Btree::removeName(std::string name)
+{
+  //traverse to leaf node that contains name
+  Node* currentNode = root;
+  while (!(currentNode->isLeaf))
+    {
+      //if name is greater than the greatest key in Node, traverse to last child
+      if (name >= currentNode->keys[currentNode->keyCount - 1])
+        {
+          currentNode = currentNode->children[currentNode->keyCount];
+        }
+
+      //find out which child to traverse to
+      else
+        {
+          for (int i = 0; i <currentNode->keyCount; i++)
+            {
+              if (name < currentNode->keys[i])
+                {
+                  currentNode = currentNode->children[i];
+                  break;
+                }
+            }
+        }
+    }
+  int index = -1;
+  for (int i = 0; i < currentNode->leafCount; i++)
+    {
+      if (name == currentNode->leaf[i].name)
+        {
+          index = i;
+          break;
+        }
+    }
+  if (index == -1)
+    return;
+  currentNode->leaf[index].isDeleted = true;
+
+  
+
+
+}
+
 //prints out information of all people from nameLowerBound to nameUpperBound
 void Btree::rangeQuery(string nameLowerBound, string nameUpperBound)
 {
@@ -159,26 +202,26 @@ void Btree::rangeQuery(string nameLowerBound, string nameUpperBound)
     }
   
   //find the index where lower bound is located
-  int index = 0;
-  for (int i = 0; i < currentNode->leafCount; i++)
+  int i;
+  for (i = 0; i < currentNode->leafCount; i++)
     {
       if (nameLowerBound <= currentNode->leaf[i].name)
 	{
-	  index = i;
 	  break;
 	}
     }
   
   //print out people starting at lower bound
-  while (index < currentNode->leafCount)
+  while (i < currentNode->leafCount)
     {
       //if it hits upper bound in same leaf
-      if (nameUpperBound < currentNode->leaf[index].name)
+      if (nameUpperBound < currentNode->leaf[i].name)
 	{
 	  return;
 	}
-      print(currentNode->leaf[index].index);
-      index++;
+      if (!(currentNode->leaf[i].isDeleted)) 
+	print(currentNode->leaf[i].index);
+      i++;
     }
   //call helper function with currentNode->next until it reaches upper bound
   rangeQueryHelper(currentNode->next, nameUpperBound);
@@ -203,8 +246,9 @@ void Btree::rangeQueryHelper(Node* currentNode, string nameUpperBound)
         {
           return;
         }
-      //call print with profile index
-      print(currentNode->leaf[i].index);
+      //call print with profile indexx
+      if (!(currentNode->leaf[i].isDeleted))
+	print(currentNode->leaf[i].index);
     }
   
   //recurse with currentNode->next

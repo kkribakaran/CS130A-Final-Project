@@ -93,7 +93,7 @@ void AdjacencyList::listFriendsInfo(string name) {
      If the original hashed index is empty, it means
      the name isn't in the network
   **/
-  if(index == -1)
+  if(index == -1 || array[index].isPersonDeleted())
     {
       cout<<"Name not found"<<endl;
       return; 
@@ -135,18 +135,22 @@ void AdjacencyList::print(string name) {
   cout<<name<<","<<age<<","<<occupation;  
 }
 
-
+//precondition: friend1 and friend1 are in the list
 void AdjacencyList::addFriend(string friend1, string friend2)
 {
+  
   //get indexes of each friend
   int friend1index = getHashedIndex(friend1);
   int friend2index = getHashedIndex(friend2);
   
+  if (array[friend1index].isPersonDeleted() || array[friend2index].isPersonDeleted())
+    return;
+
   array[friend1index].addFriend(friend2);
   array[friend2index].addFriend(friend1);
   
 }
-
+//gets the index name is hashed to in the array
 int AdjacencyList::getHashedIndex(string name)
 {
   int originalIndex = hash(name);
@@ -164,6 +168,8 @@ int AdjacencyList::getHashedIndex(string name)
       else 
 	  originalIndex++;
     }
+  if (array[originalIndex].isPersonDeleted())
+    return -1;
   return originalIndex;
 }
 
@@ -171,7 +177,7 @@ void AdjacencyList::printAll()
 {
   for (int i = 0; i < 211; i++)
     {
-      if (array[i].getName() != "") 
+      if (array[i].getName() != "" && !array[i].isPersonDeleted()) 
 	{
 	  print(array[i].getName());
 	  AdjListObject::FriendNode* currentFriend = array[i].getRoot();
@@ -182,5 +188,18 @@ void AdjacencyList::printAll()
 	    }
 	  cout<<endl;
 	}
+    }
+}
+
+void AdjacencyList::deleteName(string name)
+{
+  int index = getHashedIndex(name);
+  if (index == -1 || array[index].isPersonDeleted())
+    return;
+  array[index].setDeleted();
+  for (AdjListObject::FriendNode* currentFriend = array[index].getRoot(); currentFriend!=NULL; currentFriend=currentFriend->next)
+    {
+      int friendIndex = getHashedIndex(currentFriend->name);
+      array[friendIndex].removeFriend(name);
     }
 }

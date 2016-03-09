@@ -81,7 +81,17 @@ int main(int argc, char* argv[])
 	{
 	  string name = parameters.at(0);
 	  string age = parameters.at(1);
-	  string occupation = parameters.at(2);
+	  string occupation = "";
+	  //number of space dilineated words in occupation
+	  int wordCount = (int)parameters.size();
+	  
+	  occupation += parameters.at(2);
+	  for (int i = 3; i < wordCount; i++)
+	    {
+	      occupation += " ";
+	      occupation += parameters.at(i);
+	    }
+	  occupation = occupation.substr(1,occupation.length()-2);
 	  list.insert(name,age,occupation);			   
 	 
 	} 
@@ -104,10 +114,14 @@ int main(int argc, char* argv[])
         {
           tree.rangeQuery(parameters.at(0),parameters.at(1));
         }
+      else if (command == "Delete")
+        {
+          list.deleteName(parameters.at(0));
+	  tree.removeName(parameters.at(0));
+        }
       else
-	    {
-	  cout<<"Invalid Command."<<endl;
-	  break;
+	{
+	  cout<<"Invalid Command."<<endl;  
 	}
     }
     return 0;

@@ -10,6 +10,7 @@ struct Person
 {
   std::string name;
   int index;
+  bool isDeleted;
   Person() 
   {
     name = "";
@@ -48,6 +49,7 @@ class Btree{
   void print(int index);
   void printTree();
   void printTreeHelper(Node* root, int level);
+  void removeName(std::string name);
  private:
   Node* root;
   

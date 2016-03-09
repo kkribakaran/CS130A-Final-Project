@@ -14,20 +14,27 @@ class AdjListObject
   {
     std::string name;
     FriendNode* next;
+    
   };
   //constructors
   AdjListObject();
   AdjListObject(std::string name, int profileDataIndex);
   
+
   //getters and setters
   std::string getName();
   int getProfileDataIndex();
+  bool isPersonDeleted();
   FriendNode* getRoot();
   void setName(std::string name);
   void setProfileDataIndex(int index);
+  void setDeleted();
 
   //adds a friend to the linked list
   void addFriend(std::string friendName);
+  
+  //removes friend from linked list
+  void removeFriend(std::string friendName);
   
  private:
 
@@ -39,6 +46,8 @@ class AdjListObject
   std::string name;
   int profileDataIndex;
   FriendNode* root;
+  //when deleted, is true
+  bool isDeleted;
 };
 
 #endif

@@ -29,7 +29,8 @@ class AdjacencyList
 
   void addFriend(std::string friend1, std::string friend2);
   void printAll();
-
+  void deleteName(std::string name);
+  
  private:
   int numElements;
   AdjListObject* array;

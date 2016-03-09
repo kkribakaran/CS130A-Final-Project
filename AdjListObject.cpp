@@ -9,6 +9,7 @@ AdjListObject::AdjListObject()
   name = "";
   profileDataIndex = -10;
   root = NULL;
+  isDeleted = false;
 }
 
 AdjListObject::AdjListObject(string name, int profileDataIndex)
@@ -16,11 +17,19 @@ AdjListObject::AdjListObject(string name, int profileDataIndex)
   this->name = name;
   this->profileDataIndex = profileDataIndex;
   root = NULL;
+  isDeleted = false;
 }
+
+
 //getter for name
 string AdjListObject::getName()
 {
   return name;
+}
+//getter for isDeleted
+bool AdjListObject::isPersonDeleted()
+{
+  return isDeleted;
 }
 //getter for profileDataIndex
 int AdjListObject::getProfileDataIndex() 
@@ -40,6 +49,11 @@ void AdjListObject::setName(string name)
 void AdjListObject::setProfileDataIndex(int index) 
 {
   this->profileDataIndex = index;
+}
+//sets isDeleted to true
+void AdjListObject::setDeleted()
+{
+  isDeleted = true;
 }
 //Adds a friend to this person
 void AdjListObject::addFriend(string friendName) 
@@ -66,4 +80,39 @@ void AdjListObject::addFriend(string friendName)
       temp->next = friendNode;
     }
 }
+
+void AdjListObject::removeFriend(string friendName)
+{
+  /**
+     Iterate through linked list until we get to the 
+     friend we want to delete
+  **/
+
+  FriendNode* currentNode = root;
+  //if there are currently non friends, return
+  if(!currentNode)
+    return;
+  //if root is the friend we are trying to delete, delete it and reassign the root
+  if (currentNode->name == friendName)
+    {
+      root = currentNode->next;
+      delete currentNode;
+      return;
+    }
+  
+  while (currentNode->next)
+    {
+      if (currentNode->next->name == friendName)
+	{
+	  FriendNode* temp = currentNode->next;
+	  currentNode->next = currentNode->next->next;
+	  delete temp;
+	  return;
+	}
+      currentNode = currentNode->next;
+    }
+}
+
+
+
 
