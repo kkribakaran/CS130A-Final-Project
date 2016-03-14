@@ -51,8 +51,6 @@ int main(int argc, char* argv[])
     cerr << "File not found" << endl;
   else
     {
-      //counter for btree index
-      int btreeIndexCounter = 0;
       string line;
       while(std::getline(f, line))
 	{
@@ -61,8 +59,7 @@ int main(int argc, char* argv[])
 	  for(int i = 3; i < (int) words.size(); i++)
 	    friends.push_back(words.at(i));
 	  list.initInsert(words.at(0),words.at(1),words.at(2),friends,(int)friends.size());
-	  tree.insert(words.at(0),btreeIndexCounter);
-	  btreeIndexCounter++;
+	  tree.insert(words.at(0));
 	}
     }
   while (true) 
@@ -93,7 +90,7 @@ int main(int argc, char* argv[])
 	    }
 	  occupation = occupation.substr(1,occupation.length()-2);
 	  list.insert(name,age,occupation);			   
-	 
+	  tree.insert(name);
 	} 
       else if (command == "AddFriend") 
 	{

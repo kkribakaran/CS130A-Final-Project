@@ -1,9 +1,9 @@
 #ifndef BTREE_H
 #define BTREE_H
 #include <string>
-#define OVERALL_OFFSET 53
+#define OVERALL_OFFSET 54
 #define AGE_OFFSET 20
-#define OCCUPATION_OFFSET 23
+#define OCCUPATION_OFFSET 24
 
 //This struct reperesents a Person in the B-tree, has name and index in ProfileData 
 struct Person
@@ -43,16 +43,15 @@ struct Node
 
 class Btree{
  public:
-  void insert(std::string name, int index); //inserts new person with given name and index in to b tree 
+  Btree();
+  void insert(std::string name); //inserts new person with given name into b tree 
   void rangeQuery(std::string nameLowerBound, std::string nameUpperBound); //prints out names of all users from a to b
-  void rangeQueryHelper(Node* currentNode, std::string nameUpperBound);
-  void print(int index);
-  void printTree();
-  void printTreeHelper(Node* root, int level);
   void removeName(std::string name);
  private:
   Node* root;
-  
+  int filled;
+  void print(int index);
+  void rangeQueryHelper(Node* currentNode, std::string nameUpperBound);
   //helper function for insert
   //currentNode is the node we are currently at
   //keyInsert is the new key we need to add

@@ -4,7 +4,13 @@
 #include <stdio.h>
 using namespace std;
 
-void Btree::insert(string name, int index)
+Btree::Btree()
+{
+  root = NULL;
+  filled = 0;
+}
+
+void Btree::insert(string name)
 {
   //if Btree is empty, create new leaf node, put person in first index
   if (root == NULL)
@@ -13,9 +19,10 @@ void Btree::insert(string name, int index)
     leafNode->isLeaf = true;
     leafNode->leaf = new Person[4];
     leafNode->leaf[0].name = name;
-    leafNode->leaf[0].index = index;
+    leafNode->leaf[0].index = filled;
     leafNode->leafCount = 1;
     root = leafNode;
+    filled++;
     return;
   }
 
@@ -55,9 +62,9 @@ void Btree::insert(string name, int index)
     }
   //insert person
   currentNode->leaf[i].name = name;
-  currentNode->leaf[i].index = index;
+  currentNode->leaf[i].index = filled;
   currentNode->leafCount++;
-  
+  filled++;
 
   //if leaf is full
   if (currentNode->leafCount ==4)
@@ -117,14 +124,14 @@ void Btree::print(int index)
   //calculate offset based on profiledata index
   int offset = OVERALL_OFFSET * index;
   char name[20];
-  char age[3];
+  char age[4];
   char occupation[30];
 
   //seek and read data to variables.
   fseek(profileData,offset,SEEK_SET);
   fgets(name,20,profileData);
   fseek(profileData,offset + AGE_OFFSET,SEEK_SET);
-  fgets(age,3,profileData);
+  fgets(age,4,profileData);
   fseek(profileData,offset + OCCUPATION_OFFSET,SEEK_SET);
   fgets(occupation,30,profileData);
   //print variables
@@ -168,10 +175,6 @@ void Btree::removeName(std::string name)
   if (index == -1)
     return;
   currentNode->leaf[index].isDeleted = true;
-
-  
-
-
 }
 
 //prints out information of all people from nameLowerBound to nameUpperBound
@@ -303,7 +306,8 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
       //update keyCounts
       splitNode->keyCount = 2;
       currentNode->keyCount = 2;
-
+      
+      //make sure all children point to their respective parents
       for (int j = 0; j <= 2; j++)
 	{
 	  currentNode->children[j]->parent = currentNode;
@@ -333,33 +337,30 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
     }
 }
 
-void Btree::printTree()
-{
-  printTreeHelper(root, 0);
-}
 
-void Btree::printTreeHelper(Node* currentNode, int level)
-{
-  if (currentNode->isLeaf)
-    {
-      cout<<level<<" ";
-      for (int i = 0; i < currentNode->leafCount; i++)
-	{
-	  cout<<currentNode->leaf[i].name<<" ";
-	}
-      cout<<endl;
-      return;
-    }  
-cout<<level<<" ";
-  for(int i = 0; i <currentNode->keyCount;i++)
-    {
-      cout<<currentNode->keys[i]<<" ";
-    }
-  cout<<endl;
-  for(int i = 0; i <=currentNode->keyCount;i++)
-    {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
       
-      printTreeHelper(currentNode->children[i], level+1);
-    }
-
-}
+  
+  
+  

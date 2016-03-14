@@ -87,6 +87,7 @@ int AdjacencyList::hash(string str, int seed)
   return hash;
 }
 
+//List the info of all of name's friends
 void AdjacencyList::listFriendsInfo(string name) {
   int index = getHashedIndex(name);
   /**
@@ -123,12 +124,12 @@ void AdjacencyList::print(string name) {
   
   //calculate offset based on profiledata index
   int offset = OVERALL_OFFSET * printedObject.getProfileDataIndex();
-  char age[3];
+  char age[4];
   char occupation[30];
 
   //seek and read data to variables.
   fseek(profileData,offset + AGE_OFFSET,SEEK_SET);
-  fgets(age,3,profileData);
+  fgets(age,4,profileData);
   fseek(profileData,offset + OCCUPATION_OFFSET,SEEK_SET);
   fgets(occupation,30,profileData);
 

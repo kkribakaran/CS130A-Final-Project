@@ -6,9 +6,9 @@
 #include <vector>
 
 #define TABLE_SIZE 211
-#define OVERALL_OFFSET 53
+#define OVERALL_OFFSET 54
 #define AGE_OFFSET 20
-#define OCCUPATION_OFFSET 23
+#define OCCUPATION_OFFSET 24
 
 //This class represents the adjacency list
 class AdjacencyList 
@@ -24,7 +24,6 @@ class AdjacencyList
   //the hash function
   int hash(std::string str, int seed = 0);
   void search(std::string name);
-  void print(std::string name);
   void listFriendsInfo(std::string name);
 
   void addFriend(std::string friend1, std::string friend2);
@@ -35,6 +34,7 @@ class AdjacencyList
   int numElements;
   AdjListObject* array;
 
+  void print(std::string name);
   int getHashedIndex(std::string name);
 };
 #endif
