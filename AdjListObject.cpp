@@ -73,7 +73,7 @@ void AdjListObject::addFriend(string friendName)
     root = friendNode;
   else
     {
-      while (temp->next) 
+      while (temp->next && temp->next->name != friendName) 
 	{
 	  temp = temp->next;
 	}

@@ -1,9 +1,9 @@
 #ifndef BTREE_H
 #define BTREE_H
 #include <string>
-#define OVERALL_OFFSET 54
+#define OVERALL_OFFSET 53
 #define AGE_OFFSET 20
-#define OCCUPATION_OFFSET 24
+#define OCCUPATION_OFFSET 23
 
 //This struct reperesents a Person in the B-tree, has name and index in ProfileData 
 struct Person

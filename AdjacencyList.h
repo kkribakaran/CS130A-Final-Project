@@ -6,9 +6,9 @@
 #include <vector>
 
 #define TABLE_SIZE 211
-#define OVERALL_OFFSET 54
+#define OVERALL_OFFSET 53
 #define AGE_OFFSET 20
-#define OCCUPATION_OFFSET 24
+#define OCCUPATION_OFFSET 23
 
 //This class represents the adjacency list
 class AdjacencyList 
