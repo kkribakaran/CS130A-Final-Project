@@ -122,7 +122,8 @@ void Btree::removeName(string name)
 {
   //go to the leaf Node with name
   Node* currentNode = traverseToLeaf(name);
-  
+
+  //find name's index in the leafArray
   int index = -1;
   for (int i = 0; i < currentNode->leafCount; i++)
     {
@@ -302,8 +303,6 @@ Node* Btree::traverseToLeaf(string name)
     }
   return currentNode;
 }
-
-
 
 
 
