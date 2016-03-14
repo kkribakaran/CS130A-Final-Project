@@ -50,6 +50,8 @@ class Btree{
  private:
   Node* root;
   int filled;
+  //returns a pointer to the leafNode with name in its leafArray
+  Node* traverseToLeaf(std::string name);
   void print(int index);
   void rangeQueryHelper(Node* currentNode, std::string nameUpperBound);
   //helper function for insert

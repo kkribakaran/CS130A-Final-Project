@@ -25,29 +25,9 @@ void Btree::insert(string name)
     filled++;
     return;
   }
-
-  //traverse Btree to leaf to insert
-  Node* currentNode = root;
-  while (!(currentNode->isLeaf))
-    {
-      //if name is greater than the greatest key in Node, traverse to last child
-      if (name >= currentNode->keys[currentNode->keyCount - 1])
-	{
-	  currentNode = currentNode->children[currentNode->keyCount];
-	}
-      //find out which child to traverse to
-      else
-	{
-	  for (int i = 0; i <currentNode->keyCount; i++)
-	    {
-	      if (name < currentNode->keys[i])
-		{
-		  currentNode = currentNode->children[i];
-		  break;
-		}
-	    }
-	}
-    }
+  //go to the leafNode that has the name
+  Node* currentNode = traverseToLeaf(name);
+  
   //find out where new person goes in leaf array
   int i;
   for (i = 0; i < currentNode->leafCount; i++)
@@ -138,31 +118,11 @@ void Btree::print(int index)
   cout<<name<<","<<age<<","<<occupation<<endl;
 }
 
-void Btree::removeName(std::string name)
+void Btree::removeName(string name)
 {
-  //traverse to leaf node that contains name
-  Node* currentNode = root;
-  while (!(currentNode->isLeaf))
-    {
-      //if name is greater than the greatest key in Node, traverse to last child
-      if (name >= currentNode->keys[currentNode->keyCount - 1])
-        {
-          currentNode = currentNode->children[currentNode->keyCount];
-        }
-
-      //find out which child to traverse to
-      else
-        {
-          for (int i = 0; i <currentNode->keyCount; i++)
-            {
-              if (name < currentNode->keys[i])
-                {
-                  currentNode = currentNode->children[i];
-                  break;
-                }
-            }
-        }
-    }
+  //go to the leaf Node with name
+  Node* currentNode = traverseToLeaf(name);
+  
   int index = -1;
   for (int i = 0; i < currentNode->leafCount; i++)
     {
@@ -180,29 +140,8 @@ void Btree::removeName(std::string name)
 //prints out information of all people from nameLowerBound to nameUpperBound
 void Btree::rangeQuery(string nameLowerBound, string nameUpperBound)
 {
-  //traverse to leaf node that contains nameLowerBound
-  Node* currentNode = root;
-  while (!(currentNode->isLeaf))
-    {
-      //if name is greater than the greatest key in Node, traverse to last child
-      if (nameLowerBound >= currentNode->keys[currentNode->keyCount - 1])
-        {
-          currentNode = currentNode->children[currentNode->keyCount];
-        }
-      
-      //find out which child to traverse to
-      else
-        {
-          for (int i = 0; i <currentNode->keyCount; i++)
-            {
-              if (nameLowerBound < currentNode->keys[i])
-                {
-                  currentNode = currentNode->children[i];
-                  break;
-                }
-            }
-        }
-    }
+  //go to the leafNode with nameLowerBound
+  Node* currentNode = traverseToLeaf(nameLowerBound);
   
   //find the index where lower bound is located
   int i;
@@ -336,10 +275,33 @@ void Btree::siftUp(Node * currentNode, string keyInsert, Node * nodeInsert)
 	}
     }
 }
-
-
-
-
+//returns a pointer to the leafNode with name in its leafArray
+Node* Btree::traverseToLeaf(string name)
+{
+  //traverse Btree to leaf to insert
+  Node* currentNode = root;
+  while (!(currentNode->isLeaf))
+    {
+      //if name is greater than the greatest key in Node, traverse to last child
+      if (name >= currentNode->keys[currentNode->keyCount - 1])
+	{
+	  currentNode = currentNode->children[currentNode->keyCount];
+	}
+      //find out which child to traverse to
+      else
+	{
+	  for (int i = 0; i <currentNode->keyCount; i++)
+	    {
+	      if (name < currentNode->keys[i])
+		{
+		  currentNode = currentNode->children[i];
+		  break;
+		}
+	    }
+	}
+    }
+  return currentNode;
+}
 
 
 
